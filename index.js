@@ -1,177 +1,42 @@
-var btnContainer = document.getElementById("navbar");
-var sections = document.querySelectorAll(".section");
-var secBtns = document.querySelectorAll(".controls");
-var btns = document.getElementsByClassName("control");
-var allSections = document.querySelector(".main-contents");
+const mysql = require('mysql2');
 
-function transitions() {
-    for (i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function() {
-            var current = document.getElementsByClassName("active-btn");
-            current[0].className = current[0].className.replace(" active-btn", "");
-            this.className += " active-btn active";
+// Create a connection to the remote database
+const connection = mysql.createConnection({
+    host: 'Baridoosam-joelintschool.com.ng', // Replace with your remote server's IP address or hostname
+    user: 'qjinnawk_user', // Your database username
+    password: 'TW*p@xSgGOh8', // Your database password
+    database: 'qjinnawk_barido', // Your database name
+    port: 3306 // Optional: specify the port if it's different from the default
+});
 
-            // var currents = document.getElementsByClassName("active");
-            // currents[0].className = current[0].className.replace(" active", "");
-            // this.className += " active";
-        });
+// Connect to the database
+connection.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err);
+        return;
+    }
+    console.log('Connected to the database.');
+});
+
+// Define the data to insert
+const data = {
+    id: 9,
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    created_at: new Date('2024-07-08 03:00:10') // Use a JavaScript Date object for timestamp
+};
+
+// Insert the data into the tester table
+const query = 'INSERT INTO tester (id, name, email, created_at) VALUES (?, ?, ?, ?)';
+const values = [data.id, data.name, data.email, data.created_at];
+
+connection.execute(query, values, (err, results) => {
+    if (err) {
+        console.error('Error inserting data:', err);
+    } else {
+        console.log('Data inserted successfully:', results);
     }
 
-    // section active
-    allSections.addEventListener("click", function(e) {
-        const id = e.target.dataset.id;
-        if (id) {
-            secBtns.forEach((element) => {
-                element.classList.remove("active");
-            });
-
-            e.target.classList.add("active");
-
-            sections.forEach((elements) => {
-                elements.classList.remove("active");
-            });
-
-            // removedisplay-b
-            var sec2 = document.querySelector(".sec-2");
-            var sec3 = document.querySelector(".sec-3");
-            var sec4 = document.querySelector(".sec-4");
-            console.log(sec2.classList[4]);
-
-            if (sec2.classList === "active" || sec3.classList === "active") {
-                console.log("hello");
-            } else if (sec4.classList === "active") {
-                s1.classList.remove("display-b");
-            }
-
-            const eliment = document.getElementById(id);
-            eliment.classList.add("active");
-        }
-    });
-
-    // Toggle
-
-    function updateClock() {
-        const element = document.querySelector(".theme-btn");
-        var date = new Date();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? "pm" : "am";
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        var strTime = hours + ":" + minutes + " " + ampm;
-
-        element.innerHTML = [strTime].join(" / ");
-
-        setTimeout(updateClock, 1000);
-    }
-    updateClock();
-
-    // element.addEventListener("click", myFunction);
-
-    // function myFunction() {
-    //     let el = document.body;
-    //     el.classList.toggle("light-mode");
-    // }
-}
-
-transitions();
-
-// textTransition
-
-function updateType() {
-    var typed = new Typed(".auto-input", {
-        strings: [
-            "I'm a front end Developer",
-            "I build aesthetic Websites",
-            "Explore more on my site😉❤️",
-        ],
-        typeSpeed: 90,
-        backSpeed: 60,
-        loop: true,
-    });
-    $(".typed-cursor").css("visibility", "hidden");
-}
-
-setTimeout(updateType, 8000);
-
-// formdata
-
-// handle the form submission event
-
-function submitForm(event) {
-    event.preventDefault(); // Prevents the default form submission
-
-    // Display alert message
-    alert(
-        "This feature is unavailable currently,please send an email to yusufabdulkabir7@gmail.com"
-    );
-
-    // Clear the form details
-    document.getElementById("form").reset();
-}
-
-// helper function for sending an AJAX request
-
-function ajax(method, url, data, success, error) {
-    var xhr = new XMLHttpRequest();
-    xhr.open(method, url);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState !== XMLHttpRequest.DONE) return;
-        if (xhr.status === 200) {
-            success(xhr.response, xhr.responseType);
-        } else {
-            error(xhr.status, xhr.response, xhr.responseType);
-        }
-    };
-    xhr.send(data);
-}
-
-var s1 = document.querySelector(".intro");
-var h1 = document.querySelector(".header");
-var settings = document.querySelector(".settings");
-
-function change() {
-    setTimeout(changed, 4000);
-    setTimeout(visi, 5000);
-}
-
-function changed() {
-    s1.classList.add("display-n");
-    $(".controls").addClass("display-op");
-    $(".auto-input").addClass("display-block");
-    $(".theme-btn").addClass("display-block");
-}
-
-function visi() {
-    h1.classList.add("display-b");
-    settings.classList.add("display-iblock");
-    $(".h2").addClass("display-iblock");
-}
-
-
-// colorpallete
-
-
-
-window.addEventListener("load", function() {
-    const colorOptions = document.querySelectorAll(".circle");
-    let selectedColor = getComputedStyle(document.documentElement).getPropertyValue('--color-secondary'); // Initialize with the default color
-
-    colorOptions.forEach((option) => {
-        const color = option.getAttribute("data-color");
-
-        option.addEventListener("mouseover", () => {
-            document.documentElement.style.setProperty('--color-secondary', color);
-        });
-
-        option.addEventListener("mouseleave", () => {
-            document.documentElement.style.setProperty('--color-secondary', selectedColor);
-        });
-
-        option.addEventListener("click", () => {
-            selectedColor = color; // Update the selected color on click
-        });
-    });
+    // Close the database connection
+    connection.end();
 });
